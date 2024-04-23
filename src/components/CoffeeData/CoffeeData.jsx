@@ -1,21 +1,14 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
-const CoffeeData = ({coffee}) => {
+const CoffeeData = ({coffee,coffees,setCoffees}) => {
     const {_id,name,quantity,supply,taste,category,details,photo} = coffee
 
     const handleDelete = (_id)=>{
       console.log(_id)
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
-      }).then((result) => {
-        if (result.isConfirmed) {
+     
+     
          
 
           fetch(`http://localhost:3000/coffee/${_id}`,{
@@ -26,15 +19,21 @@ const CoffeeData = ({coffee}) => {
             console.log(data)
         if(data.deletedCount > 0){
           Swal.fire({
-            title: "Deleted!",
-            text: "Your coffee has been deleted.",
+            title: "Coffee!",
+            text: "Successfully removed",
             icon: "success"
           });
+        const filter = coffees.filter(c=>c._id !== _id)
+        setCoffees(filter)
+        console.log(filter)
+       
         }
-          }
-        )
-        }
-      });
+      
+          })
+         
+        
+
+     
     }
     return (
         <div className=''>
@@ -49,7 +48,7 @@ const CoffeeData = ({coffee}) => {
     <div className="card-actions justify-end">
     <div className="join join-vertical space-y-6">
   <button className="btn btn-success join-item">View</button>
-  <button className="btn join-item">Edit</button>
+ <Link to={`update/${_id}`}> <button className="btn join-item">Edit</button></Link>
   <button onClick={()=>handleDelete(_id)} className="btn join-item btn-error">X</button>
 </div>
     </div>
